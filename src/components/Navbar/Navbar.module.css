@@ -1,0 +1,33 @@
+.header {
+  width: 100%;
+  height: 75px;
+  background-color: #fbc000;
+  box-shadow: -1px 0 4px rgb(145, 145, 145);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.scrollHeader {
+  width: 100%;
+  height: 75px;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: -1px 0 4px rgb(212, 212, 212);
+}
+
+.signbtn,
+.mypagebtn {
+  border: 0;
+  background-color: white;
+  cursor: pointer;
+  font-family: "Noto Sans KR", sans-serif;
+  text-decoration: none;
+}
+.BtnPlus {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
