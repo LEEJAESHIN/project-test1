@@ -4,10 +4,10 @@ import Signup from "../../pages/Signup/Signup";
 import Signin from "../Signin/Signin";
 import styles from "./Navbar.module.css";
 
-function Navbar() {
+function Navbar({ handleResponseSuccess, isLogin, onSignout }) {
   const [isSigninClicked, setIsSigninClicked] = useState(false);
   const [BtnStatus, setBtnStatus] = useState(false);
-  const [ScrollY, setScrollY] = useState(0);
+
   const clickSigninBtn = () => {
     setIsSigninClicked(!isSigninClicked);
   };
@@ -16,38 +16,35 @@ function Navbar() {
     setIsSigninClicked(false);
   };
 
-  const handleFollow = () => {
-    setScrollY(window.pageYOffset);
-    if (ScrollY > 100) {
-      setBtnStatus(true);
-    } else {
-      setBtnStatus(false);
-    }
-  };
-
   return (
     <div>
-      <div id="nav-body">
-        <span id="title">
-          <img id="logo" src="" alt=""></img>
-          <span id="name">
-            <Link to="/" id="name1">
+      <div className={styles.navbody}>
+        <span className={styles.title}>
+          <span className={styles.name}>
+            <Link to="/" className={styles.name1}>
               aroundbestR
             </Link>
           </span>
         </span>
-        <div className="menu">
+        <div className={styles.menu}>
           {isSigninClicked ? (
             <Signin
               clickSigninBtn={clickSigninBtn}
               clickCloseBtn={clickCloseBtn}
               setIsSigninClicked={setIsSigninClicked}
+              handleResponseSuccess={handleResponseSuccess}
             />
           ) : null}
-          <button id="menu1" onClick={clickSigninBtn}>
-            Sign In
-          </button>
-          <Link to="/mypage" id="menu2">
+          {isLogin ? (
+            <button className={styles.menu1} onClick={onSignout}>
+              Logout
+            </button>
+          ) : (
+            <button className={styles.menu1} onClick={clickSigninBtn}>
+              Sign In
+            </button>
+          )}
+          <Link to="/mypage" className={styles.menu2}>
             mypage
           </Link>
         </div>

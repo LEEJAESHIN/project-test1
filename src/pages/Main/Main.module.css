@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;400&display=swap");
+
 .content {
   max-width: 2000px;
   margin: 0 auto;
@@ -24,6 +26,10 @@
   /* padding: 10px 10px 0px 10px; */
   text-align: left;
   border: 0.1px solid #e3e3e3;
+}
+
+.title1 {
+  font-family: "Noto Sans KR", cursive;
 }
 .titledetail {
   padding: 0px 10px 0px 10px;
@@ -106,17 +112,6 @@
 }
 #menu1:hover {
   color: #4000c7;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {

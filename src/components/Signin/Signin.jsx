@@ -1,8 +1,11 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Signup from "../../pages/Signup/Signup";
 import styles from "./Signin.module.css";
+import Google from "./Google";
 
-function Signin({ clickCloseBtn, setIsSigninClicked }) {
+function Signin({ clickCloseBtn, setIsSigninClicked, handleResponseSuccess }) {
   const [isSignUpClicked, setIsSignUpClicked] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loginInfo, setLoginInfo] = useState({
@@ -10,11 +13,42 @@ function Signin({ clickCloseBtn, setIsSigninClicked }) {
     password: "",
   });
 
+  const history = useHistory();
+  const { userId, password } = loginInfo;
+
   const clickSignUpBtn = () => {
     setIsSignUpClicked(!isSignUpClicked);
   };
   const handleInputValue = (key) => (e) => {
     setLoginInfo({ ...loginInfo, [key]: e.target.value });
+  };
+
+  const handleLogin = () => {
+    if (!userId || !password) {
+      setErrorMessage("아이디와 비밀번호를 모두 입력해주세요");
+    } else {
+      setErrorMessage("");
+      axios
+        .post(
+          "http://ec2-3-34-191-91.ap-northeast-2.compute.amazonaws.com/sign-in",
+          loginInfo
+        )
+        .then((result) => {
+          if (result.data.message === "ok") {
+            window.localStorage.setItem(
+              "accessToken",
+              JSON.stringify(result.data.accessToken)
+              // result.data.accessToken
+            );
+            handleResponseSuccess(result.data); //result.data.message="ok"!!
+            clickCloseBtn(); //::제대로 받아왔을경우 사인인창 없애기
+            history.push("/");
+          }
+        })
+        .catch((err) => {
+          setErrorMessage("가입하지 않은 사용자입니다");
+        });
+    }
   };
 
   return (
@@ -63,12 +97,16 @@ function Signin({ clickCloseBtn, setIsSigninClicked }) {
             <br />
             <div>
               <button className={styles.btnsignup} type="submit" onClick="">
-                Google
+                <Google />
               </button>
             </div>
             <br />
             <div>
-              <button className={styles.btnsignup} type="submit" onClick="">
+              <button
+                className={styles.btnsignup}
+                type="submit"
+                onClick={handleLogin}
+              >
                 로그인
               </button>
             </div>
@@ -87,3 +125,10 @@ function Signin({ clickCloseBtn, setIsSigninClicked }) {
 }
 
 export default Signin;
+
+/* 로그인 어떻게 하나 ?
+내 아이디와 비밀번호를 입력하고 axios에 정보와
+같이 요청을 한다. 이에 성공하면 
+accessToken => 상태로 내 토큰을 넣어줌
+loginhandler => 로그인 true로 됐다는걸 증명
+isAuthenticated => get 요청을 통해 내정보들을 상태 변경 하고 뿌려줌 */

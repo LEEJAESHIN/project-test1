@@ -14,17 +14,14 @@ function Signup({ clickSigninBtn, setIsSignUpClicked, clickCloseBtn }) {
     password2: "",
   });
   const { userId, userName, mobile, password, password2 } = userinfo;
-  const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
 
-  const handleTest = (e) => {
-    addToText(e);
-  };
   const handleInputValue = (key) => (e) => {
     setuserinfo({ ...userinfo, [key]: e.target.value });
   };
 
+  /***********정보 기입 오류 설정 ************* */
   const checkIdPass = (asValue) => {
     var regExp = /^[a-zA-z0-9]{4,12}$/;
     return regExp.test(asValue);
@@ -55,8 +52,10 @@ function Signup({ clickSigninBtn, setIsSignUpClicked, clickCloseBtn }) {
       setErrorMessage("아이디는 4-12자리의 숫자,영문입니다.");
       return false;
     }
+    signupreq();
   };
 
+  /******************axios 요청******************/
   const signupreq = () => {
     const userData = {
       userId: userId,
@@ -78,8 +77,7 @@ function Signup({ clickSigninBtn, setIsSignUpClicked, clickCloseBtn }) {
       .then((result) => {
         // console.log(result.data);
         if (result.data.message === "ok") {
-          clickCloseAll();
-
+          clickClose();
           history.push("/");
         }
       })
@@ -87,6 +85,8 @@ function Signup({ clickSigninBtn, setIsSignUpClicked, clickCloseBtn }) {
         setErrorMessage("사용중인 아이디입니다.");
       });
   };
+
+  /*************창을 닫는 함수************* */
   const clickCloseAll = () => {
     setIsSignUpClicked(false);
     clickCloseBtn();
@@ -157,7 +157,6 @@ function Signup({ clickSigninBtn, setIsSignUpClicked, clickCloseBtn }) {
             </button>
             <br />
             <br />
-
             {errorMessage ? (
               <div className={styles.alert}>{errorMessage}</div>
             ) : null}
@@ -168,3 +167,8 @@ function Signup({ clickSigninBtn, setIsSignUpClicked, clickCloseBtn }) {
   );
 }
 export default Signup;
+
+/* 회원가입은 정보들을 입력하고 필요한 정보들이
+다 문제없이 기입이 되었을때 axios를 통해
+유저정보를 넣고 요청을 하고 응답으로 ok가
+되었을때 창을 닫고 로그인페이지로 이동한다. */
