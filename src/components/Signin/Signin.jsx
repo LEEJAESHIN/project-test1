@@ -71,7 +71,7 @@ function Signin({ clickCloseBtn, setIsSigninClicked, handleResponseSuccess }) {
               <input
                 type="text"
                 className={styles.inputText}
-                onChange={handleInputValue("email")}
+                onChange={handleInputValue("userId")}
                 placeholder="아이디를 입력하세요"
               />
             </div>
