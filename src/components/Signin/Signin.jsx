@@ -46,7 +46,7 @@ function Signin({ clickCloseBtn, setIsSigninClicked, handleResponseSuccess }) {
           }
         })
         .catch((err) => {
-          setErrorMessage("가입하지 않은 사용자입니다");
+          setErrorMessage("가입하지 않은 사용자입니다.");
         });
     }
   };
@@ -83,7 +83,9 @@ function Signin({ clickCloseBtn, setIsSigninClicked, handleResponseSuccess }) {
                 placeholder="비밀번호 를 입력하세요"
               />
             </div>
-            {errorMessage ? <li className="error">{errorMessage}</li> : null}
+            {errorMessage ? (
+              <div className={styles.error}>{errorMessage}</div>
+            ) : null}
             <br />
             <div>
               <button
@@ -116,7 +118,7 @@ function Signin({ clickCloseBtn, setIsSigninClicked, handleResponseSuccess }) {
                 나가기
               </button>
             </div>
-            <div className="alert-box">{errorMessage}</div>
+            {/* <div className="alert-box">{errorMessage}</div> */}
           </form>
         </div>
       </section>

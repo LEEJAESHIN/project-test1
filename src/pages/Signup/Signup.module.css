@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+
 .backdrop {
   position: fixed;
   z-index: 4;
@@ -15,7 +18,9 @@
   font-size: 1.5em;
 }
 .warningtext {
-  font-size: 15px;
+  font-family: "Jua";
+  font-size: 16px;
+  letter-spacing: 1.2px;
 }
 
 .popup {

@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import styles from "./Writing.module.css";
 import axios from "axios";
 import AWS from "aws-sdk";
 
 axios.defaults.withCredentials = true;
 
-function Writing({ isLogin }) {
+function Writing({ isLogin, setListRender, accessToken }) {
   const [title, setTitle] = useState("");
   const [firstImg, setFirstImg] = useState("");
   const [content, setContent] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const history = useHistory();
 
@@ -22,6 +23,7 @@ function Writing({ isLogin }) {
   };
 
   const handleContent = (e) => {
+    console.log(e.target.value);
     setContent(e.target.value);
   };
 
@@ -35,15 +37,16 @@ function Writing({ isLogin }) {
   const firstImgHandle = (event) => {
     //input 태그를 통한 선택한 파일 객체 ([0]에 저장됌)
     const imageFile = event.target.files[0];
+
     if (!imageFile) {
       return setFirstImg(null);
     }
 
     const upload = new AWS.S3.ManagedUpload({
       params: {
-        Bucket: "pickmeupimagestorage",
-        Key: imageFile.name,
-        Body: imageFile,
+        Bucket: "pickmeupimagestorage", //업로드할 버킷명
+        Key: imageFile.name, //업로드할 파일명
+        Body: imageFile, //업로드할 파일 객체
       },
     });
 
@@ -58,6 +61,34 @@ function Writing({ isLogin }) {
         console.log(err);
       }
     );
+  };
+
+  const createFeedHandle = () => {
+    // 피드테이블에 레코드 생성하는 axios POST 요청(지영)
+    // 해당 피드 페이지 or 홈화면으로 Redirect 필요
+
+    if (!title || !firstImg || !content) {
+      setErrorMessage("항목을 모두 입력해주세요! 😊️");
+    } else {
+      console.log("*********************", accessToken);
+      axios.post(
+        "http://ec2-3-34-191-91.ap-northeast-2.compute.amazonaws.com/posting",
+        {
+          title: title,
+          img_1: firstImg,
+          contents: content,
+          //배열이니까 JSON?
+        },
+        {
+          headers: {
+            authorization: accessToken,
+          },
+          "Content-Type": "application/json",
+        }
+      );
+      setListRender();
+      history.push("/");
+    }
   };
 
   if (!isLogin) {
@@ -107,11 +138,16 @@ function Writing({ isLogin }) {
             <button className={styles.tagBtns}>강원도</button>
           </div>
           <div className={styles.selectBtn}>
-            <button className={styles.selectBtns}>등록</button>
+            <button className={styles.selectBtns} onClick={createFeedHandle}>
+              등록
+            </button>
+
             <button className={styles.selectBtns} onClick={handleBack}>
               취소
             </button>
           </div>
+          <br />
+          <div className={styles.error}>{errorMessage}</div>
         </div>
       </div>
     </div>

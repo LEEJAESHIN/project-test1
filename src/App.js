@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Navbar from "./components/Navbar/Navbar";
-import Mypage from "./pages/Mypage";
+import Mypage from "./pages/Mypage/Mypage";
 import Main from "./pages/Main/Main";
 import Signup from "./pages/Signup/Signup";
 import PlusButton from "./components/ScrollButton/PlusButton";
@@ -13,9 +13,10 @@ import axios from "axios";
 
 function App() {
   const [accessToken, setAccessToken] = useState(null);
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [info, setInfo] = useState(null);
   const [isGoogle, setIsGoogle] = useState(false);
+  const [listRender, setListRender] = useState(true);
 
   //로그인 성공 함수
   const handleResponseSuccess = (data) => {
@@ -81,13 +82,17 @@ function App() {
             <Main />
           </Route>
           <Route path="/mypage" exact>
-            <Mypage />
+            <Mypage isLogin={isLogin} info={info} />
           </Route>
           <Route path="/login" exact>
             <Signup />
           </Route>
           <Route path="/writing">
-            <Writing isLogin={isLogin} />
+            <Writing
+              isLogin={isLogin}
+              setListRender={setListRender}
+              accessToken={accessToken}
+            />
           </Route>
         </Switch>
         <PlusButton />
